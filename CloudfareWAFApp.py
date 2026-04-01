@@ -7,6 +7,17 @@ import datetime
 from enum import Enum
 import webbrowser
 import json
+import sys
+import os
+
+
+def get_resource_path(relative_path):
+    if getattr(sys, "frozen", False):
+        base_path = os.path.dirname(sys.executable)
+    else:
+        base_path = os.path.dirname(os.path.abspath(__file__))
+
+    return os.path.join(base_path, relative_path)
 
 
 class AuthMethod(Enum):
@@ -26,7 +37,15 @@ class CloudflareWAFApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Cloudflare WAF 批量部署工具 v1.0")
-        self.root.geometry("800x850")  # 增加窗口高度以适应新的UI元素
+        self.root.geometry("800x950")
+
+        icon_path = get_resource_path("app.ico")
+        
+        if os.path.exists(icon_path):
+            try:
+                self.root.iconbitmap(icon_path)
+            except Exception as e:
+                print(f"Failed to load icon: {e}")
 
         # 创建菜单栏
         self.create_menu()
@@ -231,6 +250,8 @@ Global API Key 拥有账户的完全控制权，一旦泄露后果严重。
 
 版本: 1.0 正式版
 描述: 批量部署 Cloudflare WAF 规则的专业工具
+作者：Stone
+官方博客：https://blog.cacca.cc
 
 功能特性:
 1. 支持 API Token 和 Global API Key 两种认证方式
